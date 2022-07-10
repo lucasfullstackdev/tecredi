@@ -15,7 +15,7 @@ class CreateProdutoTable extends Migration
 
             $table->string('nome', 255)->unique();
             $table->integer('quantidade');
-            $table->boolean('ativo');
+            $table->boolean('ativo')->default(true);
 
             $table->integer('categoria_id')->unsigned();
             $table->foreign('categoria_id')->references('id')->on('categoria');

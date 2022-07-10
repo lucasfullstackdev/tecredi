@@ -15,7 +15,7 @@ class CreateCategoriaProdutoTable extends Migration
             $table->increments('id')->unsigned();
 
             $table->string('nome', 255)->unique();
-            $table->boolean('ativo');
+            $table->boolean('ativo')->default(true);
 
             $table->timestamps();
             $table->softDeletes();
