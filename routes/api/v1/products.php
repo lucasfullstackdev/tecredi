@@ -1,10 +1,11 @@
 <?php
 
+use App\Http\Controllers\ProdutoController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/')->group(function () {
-    Route::post('/', fn () => dd('insert product'));
-    Route::get('/', fn () => dd('list all products'));
+    Route::post('/', [ProdutoController::class, 'store']);
+    Route::get('/', [ProdutoController::class, 'index']);
 
     Route::prefix('/export')->group(function () {
         Route::get('/csv', fn () => dd('export all products to csv'));
@@ -13,9 +14,10 @@ Route::prefix('/')->group(function () {
 });
 
 Route::prefix('/{id}')->group(function () {
-    Route::put('/', fn () => dd('update product'))->where('id', '[0-9]+');
-    Route::delete('/', fn () => dd('delete product'))->where('id', '[0-9]+');
-    Route::get('/', fn () => dd('list specific product'))->where('id', '[0-9]+');
+    Route::put('/', [ProdutoController::class, 'update'])->where('id', '[0-9]+');
+
+    Route::delete('/', [ProdutoController::class, 'destroy'])->where('id', '[0-9]+');
+    Route::get('/', [ProdutoController::class, 'show'])->where('id', '[0-9]+');
 
     Route::prefix('/export')->group(function () {
         Route::get('/csv', fn () => dd('export specific product to csv'));

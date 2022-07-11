@@ -9,7 +9,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 
 abstract class AbstractRequest extends FormRequest
 {
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
