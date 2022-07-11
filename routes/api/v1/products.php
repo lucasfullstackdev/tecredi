@@ -8,7 +8,7 @@ Route::prefix('/')->group(function () {
     Route::post('/', [ProdutoController::class, 'store']);
 
     Route::prefix('/export')->group(function () {
-        Route::get('/csv', fn () => dd('export all products to csv'));
+        Route::get('/csv', [ProdutoController::class, 'exportCsv']);
         Route::get('/pdf', fn () => dd('export all products to pdf'));
     });
 });

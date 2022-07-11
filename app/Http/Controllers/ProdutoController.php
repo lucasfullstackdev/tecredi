@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ProdutosExport;
 use App\Http\Requests\StoreProdutoRequest;
 use App\Services\ProdutoService;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProdutoController extends AbstractController
 {
@@ -27,6 +29,17 @@ class ProdutoController extends AbstractController
     {
         return $this->response(
             $this->service->find($id)->update($produtoRequest)
+        );
+    }
+
+    public function exportCsv()
+    {
+        $produtos = $this->service->with(['categoria'])->all();
+
+        return Excel::download(
+            new ProdutosExport($produtos),
+            'produtos.csv',
+            \Maatwebsite\Excel\Excel::CSV
         );
     }
 }
