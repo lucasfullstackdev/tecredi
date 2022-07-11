@@ -6,6 +6,8 @@ use App\Http\Requests\AbstractRequest;
 
 interface ServiceInterface
 {
+    public function paginate(): array;
+
     public function all(): array;
 
     public function find(int $id): AbstractService;

@@ -33,11 +33,25 @@ abstract class AbstractService
     private $entity;
 
     /**
-     * Encontrando todo os Registros
+     * Encontrando todo os Registros [com Paginação]
+     */
+    public function paginate(): array
+    {
+        $entities = $this->model::with($this->with)->paginate();
+
+        if ($entities->isEmpty()) {
+            return [];
+        }
+
+        return $entities->toArray();
+    }
+
+    /**
+     * Encontrando todo os Registros [sem paginação]
      */
     public function all(): array
     {
-        $entities = $this->model::paginate();
+        $entities = $this->model::with($this->with)->get();
 
         if ($entities->isEmpty()) {
             return [];

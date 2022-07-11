@@ -16,7 +16,7 @@ abstract class AbstractController extends Controller
     public function index()
     {
         return $this->response(
-            $this->service->all()
+            $this->service->with(['categoria'])->paginate()
         );
     }
 
