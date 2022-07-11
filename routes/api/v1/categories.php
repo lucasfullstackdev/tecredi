@@ -1,10 +1,11 @@
 <?php
 
+use App\Http\Controllers\CategoriaController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/')->group(function () {
-    Route::post('/', fn () => dd('insert category'));
-    Route::get('/', fn () => dd('list all categories'));
+    Route::post('/', [CategoriaController::class, 'store']);
+    Route::get('/', [CategoriaController::class, 'index']);
 
     Route::prefix('/export')->group(function () {
         Route::get('/csv', fn () => dd('export all categories to csv'));
@@ -13,9 +14,10 @@ Route::prefix('/')->group(function () {
 });
 
 Route::prefix('/{id}')->group(function () {
-    Route::put('/', fn () => dd('update category'))->where('id', '[0-9]+');
-    Route::delete('/', fn () => dd('delete category'))->where('id', '[0-9]+');
-    Route::get('/', fn () => dd('list specific category'))->where('id', '[0-9]+');
+    Route::get('/', [CategoriaController::class, 'show'])->where('id', '[0-9]+');
+
+    Route::put('/', [CategoriaController::class, 'update'])->where('id', '[0-9]+');
+    Route::delete('/', [CategoriaController::class, 'destroy'])->where('id', '[0-9]+');
 
     Route::prefix('/export')->group(function () {
         Route::get('/csv', fn () => dd('export specific category to csv'));

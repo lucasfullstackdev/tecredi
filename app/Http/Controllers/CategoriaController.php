@@ -3,83 +3,61 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCategoriaRequest;
-use Illuminate\Http\Request;
+use App\Services\CategoriaService;
 
 class CategoriaController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @var CategoriaService
      */
+    private $service;
+
+    public function __construct(CategoriaService $service)
+    {
+        $this->service = $service;
+    }
+
     public function index()
     {
-        //
+        return $this->response(
+            $this->service->all()
+        );
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function store(StoreCategoriaRequest $request)
     {
-        //
+        return $this->response(
+            $this->service->store($request)
+        );
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreCategoriaRequest $storeCategoriaRequest)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
-        //
+        return $this->response(
+            $this->service->with(['produtos'])->find($id)->show()
+        );
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function update(StoreCategoriaRequest $request, int $id)
     {
-        //
+        return $this->response(
+            $this->service->find($id)->update($request)
+        );
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        //
+        return $this->response(
+            $this->service->find($id)->delete()
+        );
+    }
+
+    private function response($result)
+    {
+        return response()->json([
+            'success' => true,
+            'errors'  => [],
+            'result'  => $result
+        ]);
     }
 }
