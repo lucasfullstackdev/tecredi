@@ -5,24 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreProdutoRequest;
 use App\Services\ProdutoService;
 
-class ProdutoController extends Controller
+class ProdutoController extends AbstractController
 {
-    /**
-     * @var ProdutoService
-     */
-    private $service;
-
-    public function __construct(ProdutoService $produtoService)
-    {
-        $this->service = $produtoService;
-    }
-
-    public function index()
-    {
-        return $this->response(
-            $this->service->all()
-        );
-    }
+    protected $serviceClass = ProdutoService::class;
 
     public function store(StoreProdutoRequest $produtoRequest)
     {
@@ -43,21 +28,5 @@ class ProdutoController extends Controller
         return $this->response(
             $this->service->find($id)->update($produtoRequest)
         );
-    }
-
-    public function destroy($id)
-    {
-        return $this->response(
-            $this->service->find($id)->delete()
-        );
-    }
-
-    private function response($result)
-    {
-        return response()->json([
-            'success' => true,
-            'errors'  => [],
-            'result'  => $result
-        ]);
     }
 }

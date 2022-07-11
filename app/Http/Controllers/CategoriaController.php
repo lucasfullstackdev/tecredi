@@ -5,24 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCategoriaRequest;
 use App\Services\CategoriaService;
 
-class CategoriaController extends Controller
+class CategoriaController extends AbstractController
 {
-    /**
-     * @var CategoriaService
-     */
-    private $service;
-
-    public function __construct(CategoriaService $service)
-    {
-        $this->service = $service;
-    }
-
-    public function index()
-    {
-        return $this->response(
-            $this->service->all()
-        );
-    }
+    protected $serviceClass = CategoriaService::class;
 
     public function store(StoreCategoriaRequest $request)
     {
@@ -43,21 +28,5 @@ class CategoriaController extends Controller
         return $this->response(
             $this->service->find($id)->update($request)
         );
-    }
-
-    public function destroy($id)
-    {
-        return $this->response(
-            $this->service->find($id)->delete()
-        );
-    }
-
-    private function response($result)
-    {
-        return response()->json([
-            'success' => true,
-            'errors'  => [],
-            'result'  => $result
-        ]);
     }
 }
