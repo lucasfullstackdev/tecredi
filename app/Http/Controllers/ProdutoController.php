@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ExportCsvInterface;
+use App\Exports\ExportPdfInterface;
 use App\Exports\ProdutosExport;
 use App\Http\Requests\StoreProdutoRequest;
 use App\Services\ProdutoService;
 use Maatwebsite\Excel\Facades\Excel;
 
-class ProdutoController extends AbstractController
+class ProdutoController extends AbstractController implements ExportCsvInterface, ExportPdfInterface
 {
     protected $serviceClass = ProdutoService::class;
 
@@ -32,54 +34,54 @@ class ProdutoController extends AbstractController
         );
     }
 
-    public function exportProdutosToCsv()
+    public function exportEntitiesToCsv()
     {
         return $this->exportToCsv(
             $this->service->with(['categoria'])->all()
         );
     }
 
-    public function exportProdutoToCsv(int $id)
+    public function exportEntityToCsv(int $id)
     {
         return $this->exportToCsv([
             $this->service->with(['categoria'])->find($id)->show()
         ]);
     }
 
-    public function exportProdutosToPdf()
+    public function exportEntitiesToPdf()
     {
         return $this->exportToPdf(
             $this->service->with(['categoria'])->all()
         );
     }
 
-    public function exportProdutoToPdf(int $id)
+    public function exportEntityToPdf(int $id)
     {
         return $this->exportToPdf([
             $this->service->with(['categoria'])->find($id)->show()
         ]);
     }
 
-    private function exportToPdf(array $produtos, array $headers = [])
+    public function exportToPdf(array $entities, array $headers = [])
     {
         return Excel::download(
-            new ProdutosExport($produtos),
-            $this->getNameOfFile($produtos) . ".pdf",
+            new ProdutosExport($entities, $headers),
+            $this->getNameOfFile($entities) . ".pdf",
             \Maatwebsite\Excel\Excel::DOMPDF
         );
     }
 
-    private function exportToCsv(array $produtos, array $headers = [])
+    public function exportToCsv(array $entities, array $headers = [])
     {
         return Excel::download(
-            new ProdutosExport($produtos, $headers),
-            $this->getNameOfFile($produtos) . ".csv",
+            new ProdutosExport($entities, $headers),
+            $this->getNameOfFile($entities) . ".csv",
             \Maatwebsite\Excel\Excel::CSV
         );
     }
 
-    private function getNameOfFile(array $produtos): string
+    public function getNameOfFile(array $entities): string
     {
-        return "produto" . (count($produtos) > 1 ? 's' : '');
+        return "produto" . (count($entities) > 1 ? 's' : '');
     }
 }

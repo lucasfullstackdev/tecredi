@@ -8,8 +8,8 @@ Route::prefix('/')->group(function () {
     Route::post('/', [ProdutoController::class, 'store']);
 
     Route::prefix('/export')->group(function () {
-        Route::get('/csv', [ProdutoController::class, 'exportProdutosToCsv']);
-        Route::get('/pdf', [ProdutoController::class, 'exportProdutosToPdf']);
+        Route::get('/csv', [ProdutoController::class, 'exportEntitiesToCsv']);
+        Route::get('/pdf', [ProdutoController::class, 'exportEntitiesToPdf']);
     });
 });
 
@@ -20,7 +20,7 @@ Route::prefix('/{id}')->group(function () {
     Route::delete('/', [ProdutoController::class, 'destroy'])->where('id', '[0-9]+');
 
     Route::prefix('/export')->group(function () {
-        Route::get('/csv', [ProdutoController::class, 'exportProdutoToCsv']);
-        Route::get('/pdf', [ProdutoController::class, 'exportProdutoToPdf']);
+        Route::get('/csv', [ProdutoController::class, 'exportEntityToCsv']);
+        Route::get('/pdf', [ProdutoController::class, 'exportEntityToPdf']);
     });
 });

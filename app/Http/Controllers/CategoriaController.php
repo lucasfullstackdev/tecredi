@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Exports\CategoriaExport;
+use App\Exports\ExportCsvInterface;
+use App\Exports\ExportPdfInterface;
 use App\Http\Requests\StoreCategoriaRequest;
 use App\Services\CategoriaService;
 use Maatwebsite\Excel\Facades\Excel;
 
-class CategoriaController extends AbstractController
+class CategoriaController extends AbstractController implements ExportCsvInterface, ExportPdfInterface
 {
     protected $serviceClass = CategoriaService::class;
 
@@ -32,54 +34,54 @@ class CategoriaController extends AbstractController
         );
     }
 
-    public function exportCategoriasToCsv()
+    public function exportEntitiesToCsv()
     {
         return $this->exportToCsv(
             $this->service->all()
         );
     }
 
-    public function exportCategoriaToCsv(int $id)
+    public function exportEntityToCsv(int $id)
     {
         return $this->exportToCsv([
             $this->service->find($id)->show()
         ]);
     }
 
-    public function exportCategoriasToPdf()
+    public function exportEntitiesToPdf()
     {
         return $this->exportToPdf(
             $this->service->all()
         );
     }
 
-    public function exportCategoriaToPdf(int $id)
+    public function exportEntityToPdf(int $id)
     {
         return $this->exportToPdf([
             $this->service->find($id)->show()
         ]);
     }
 
-    private function exportToCsv(array $categorias, array $headers = [])
+    public function exportToCsv(array $entities, array $headers = [])
     {
         return Excel::download(
-            new CategoriaExport($categorias, $headers),
-            $this->getNameOfFile($categorias) . ".csv",
+            new CategoriaExport($entities, $headers),
+            $this->getNameOfFile($entities) . ".csv",
             \Maatwebsite\Excel\Excel::CSV
         );
     }
 
-    private function exportToPdf(array $categorias, array $headers = [])
+    public function exportToPdf(array $entities, array $headers = [])
     {
         return Excel::download(
-            new CategoriaExport($categorias, $headers),
-            $this->getNameOfFile($categorias) . ".pdf",
+            new CategoriaExport($entities, $headers),
+            $this->getNameOfFile($entities) . ".pdf",
             \Maatwebsite\Excel\Excel::DOMPDF
         );
     }
 
-    private function getNameOfFile(array $categorias): string
+    public function getNameOfFile(array $entities): string
     {
-        return "categoria" . (count($categorias) > 1 ? 's' : '');
+        return "categoria" . (count($entities) > 1 ? 's' : '');
     }
 }
