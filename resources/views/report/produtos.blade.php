@@ -1,4 +1,4 @@
-<table>
+<table style="table-layout: fixed;">
     <thead>
         <tr>
             @foreach ($headers as $key => $header)
@@ -11,11 +11,13 @@
             <tr>
                 @foreach ($row as $key => $value)
                     @if (in_array($key, $headers))
-                        @if ($key == 'categoria')
-                            <td>{{ $value['nome'] ?? '' }}</td>
-                        @else
-                            <td>{{ $value }}</td>
-                        @endif
+                        <td>
+                            @if ($key == 'categoria')
+                                {{ $value['nome'] ?? '' }}
+                            @else
+                                {{ $value }}
+                            @endif
+                        </td>
                     @endif
                 @endforeach
             </tr>

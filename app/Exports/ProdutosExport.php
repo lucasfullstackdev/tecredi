@@ -3,10 +3,17 @@
 namespace App\Exports;
 
 use Illuminate\Contracts\View\View;
+
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\WithCustomCsvSettings;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithColumnWidths;
 
-class ProdutosExport implements FromView, WithCustomCsvSettings
+class ProdutosExport implements
+    FromView,
+    WithCustomCsvSettings,
+    ShouldAutoSize,
+    WithColumnWidths
 {
     private $produtos;
     private $headers = [
@@ -37,7 +44,15 @@ class ProdutosExport implements FromView, WithCustomCsvSettings
         return [
             'delimiter'       => ';',
             'use_bom'         => true,
-            'output_encoding' => 'ISO-8859-1',
+            'output_encoding' => 'ISO-8859-1'
+        ];
+    }
+
+    public function columnWidths(): array
+    {
+        return [
+            'B' => 40,
+            'F' => 30
         ];
     }
 }

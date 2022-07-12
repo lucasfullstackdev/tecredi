@@ -9,7 +9,7 @@ Route::prefix('/')->group(function () {
 
     Route::prefix('/export')->group(function () {
         Route::get('/csv', [ProdutoController::class, 'exportProdutosToCsv']);
-        Route::get('/pdf', fn () => dd('export all products to pdf'));
+        Route::get('/pdf', [ProdutoController::class, 'exportProdutosToPdf']);
     });
 });
 
@@ -21,6 +21,6 @@ Route::prefix('/{id}')->group(function () {
 
     Route::prefix('/export')->group(function () {
         Route::get('/csv', [ProdutoController::class, 'exportProdutoToCsv']);
-        Route::get('/pdf', fn () => dd('export specific product to pdf'));
+        Route::get('/pdf', [ProdutoController::class, 'exportProdutoToPdf']);
     });
 });

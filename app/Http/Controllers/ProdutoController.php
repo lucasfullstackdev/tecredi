@@ -46,14 +46,40 @@ class ProdutoController extends AbstractController
         ]);
     }
 
+    public function exportProdutosToPdf()
+    {
+        return $this->exportToPdf(
+            $this->service->with(['categoria'])->all()
+        );
+    }
+
+    public function exportProdutoToPdf(int $id)
+    {
+        return $this->exportToPdf([
+            $this->service->with(['categoria'])->find($id)->show()
+        ]);
+    }
+
+    private function exportToPdf(array $produtos, array $headers = [])
+    {
+        return Excel::download(
+            new ProdutosExport($produtos),
+            $this->getNameOfFile($produtos) . ".pdf",
+            \Maatwebsite\Excel\Excel::DOMPDF
+        );
+    }
+
     private function exportToCsv(array $produtos, array $headers = [])
     {
-        $fileName = count($produtos) > 1 ? 'produtos' : 'produto';
-
         return Excel::download(
             new ProdutosExport($produtos, $headers),
-            "$fileName.csv",
+            $this->getNameOfFile($produtos) . ".csv",
             \Maatwebsite\Excel\Excel::CSV
         );
+    }
+
+    private function getNameOfFile(array $produtos): string
+    {
+        return "produto" . (count($produtos) > 1 ? 's' : '');
     }
 }
