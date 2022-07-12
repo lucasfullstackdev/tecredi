@@ -7,13 +7,13 @@ use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\WithCustomCsvSettings;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-// use Maatwebsite\Excel\Concerns\WithColumnWidths;
+use Maatwebsite\Excel\Concerns\WithColumnWidths;
 
 class CategoriaExport implements
     FromView,
     WithCustomCsvSettings,
-    ShouldAutoSize
-    // WithColumnWidths
+    ShouldAutoSize,
+    WithColumnWidths
 {
     private $categorias;
     private $headers = [
@@ -45,11 +45,12 @@ class CategoriaExport implements
         ];
     }
 
-    // public function columnWidths(): array
-    // {
-    //     return [
-    //         'B' => 40,
-    //         'F' => 30
-    //     ];
-    // }
+    public function columnWidths(): array
+    {
+        return [
+            'A' => 5,
+            'B' => 90,
+            'C' => 5,
+        ];
+    }
 }

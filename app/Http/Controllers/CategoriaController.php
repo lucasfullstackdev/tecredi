@@ -46,12 +46,40 @@ class CategoriaController extends AbstractController
         ]);
     }
 
+    public function exportCategoriasToPdf()
+    {
+        return $this->exportToPdf(
+            $this->service->all()
+        );
+    }
+
+    public function exportCategoriaToPdf(int $id)
+    {
+        return $this->exportToPdf([
+            $this->service->find($id)->show()
+        ]);
+    }
+
     private function exportToCsv(array $categorias, array $headers = [])
     {
         return Excel::download(
             new CategoriaExport($categorias, $headers),
-            "categorias.csv",
+            $this->getNameOfFile($categorias) . ".csv",
             \Maatwebsite\Excel\Excel::CSV
         );
+    }
+
+    private function exportToPdf(array $categorias, array $headers = [])
+    {
+        return Excel::download(
+            new CategoriaExport($categorias, $headers),
+            $this->getNameOfFile($categorias) . ".pdf",
+            \Maatwebsite\Excel\Excel::DOMPDF
+        );
+    }
+
+    private function getNameOfFile(array $categorias): string
+    {
+        return "categoria" . (count($categorias) > 1 ? 's' : '');
     }
 }
