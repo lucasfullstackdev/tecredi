@@ -1,8 +1,8 @@
 <table>
     <thead>
         <tr>
-            @foreach ($data[0] as $key => $value)
-                <th>{{ ucfirst($key) }}</th>
+            @foreach ($headers as $key => $header)
+                <th>{{ ucfirst($header) }}</th>
             @endforeach
         </tr>
     </thead>
@@ -10,10 +10,12 @@
         @foreach ($data as $row)
             <tr>
                 @foreach ($row as $key => $value)
-                    @if ($key == 'categoria')
-                        <td>{{ $value['nome'] ?? '' }}</td>
-                    @else
-                        <td>{{ $value }}</td>
+                    @if (in_array($key, $headers))
+                        @if ($key == 'categoria')
+                            <td>{{ $value['nome'] ?? '' }}</td>
+                        @else
+                            <td>{{ $value }}</td>
+                        @endif
                     @endif
                 @endforeach
             </tr>

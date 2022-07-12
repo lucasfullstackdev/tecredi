@@ -8,7 +8,7 @@ Route::prefix('/')->group(function () {
     Route::post('/', [ProdutoController::class, 'store']);
 
     Route::prefix('/export')->group(function () {
-        Route::get('/csv', [ProdutoController::class, 'exportCsv']);
+        Route::get('/csv', [ProdutoController::class, 'exportProdutosToCsv']);
         Route::get('/pdf', fn () => dd('export all products to pdf'));
     });
 });
@@ -20,7 +20,7 @@ Route::prefix('/{id}')->group(function () {
     Route::delete('/', [ProdutoController::class, 'destroy'])->where('id', '[0-9]+');
 
     Route::prefix('/export')->group(function () {
-        Route::get('/csv', fn () => dd('export specific product to csv'));
+        Route::get('/csv', [ProdutoController::class, 'exportProdutoToCsv']);
         Route::get('/pdf', fn () => dd('export specific product to pdf'));
     });
 });

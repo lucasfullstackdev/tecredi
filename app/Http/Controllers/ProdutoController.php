@@ -32,13 +32,27 @@ class ProdutoController extends AbstractController
         );
     }
 
-    public function exportCsv()
+    public function exportProdutosToCsv()
     {
-        $produtos = $this->service->with(['categoria'])->all();
+        return $this->exportToCsv(
+            $this->service->with(['categoria'])->all()
+        );
+    }
+
+    public function exportProdutoToCsv(int $id)
+    {
+        return $this->exportToCsv([
+            $this->service->with(['categoria'])->find($id)->show()
+        ]);
+    }
+
+    private function exportToCsv(array $produtos, array $headers = [])
+    {
+        $fileName = count($produtos) > 1 ? 'produtos' : 'produto';
 
         return Excel::download(
-            new ProdutosExport($produtos),
-            'produtos.csv',
+            new ProdutosExport($produtos, $headers),
+            "$fileName.csv",
             \Maatwebsite\Excel\Excel::CSV
         );
     }
